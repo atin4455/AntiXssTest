@@ -1,0 +1,32 @@
+﻿@using AntiXssTest.Models
+@{
+    Layout = null;
+    var htmlFromDb = @"
+<a href='javascript:alert(1)'>Click</a><br />
+<img src='3' onerror=this.remove();alert(1)>";
+}
+
+<body>
+    <fieldset>
+        <legend>Dangerous</legend>
+        <div>
+            @Html.Raw(htmlFromDb)  @* 直接輸出，XSS 風險高,但掃描沒弱點,checkmarx只會抓參數從控制器後方來的,故寫了一個Xsstest,讓參數從控制器來 *@ 
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>AntiXss (Microsoft)</legend>
+        <div>
+            @Html.AntiXssRaw(htmlFromDb)  @* Microsoft Security Application 過濾 *@
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Ganss.XSS (推薦)</legend>
+        <div>
+            @Html.SanitizedRaw(htmlFromDb)  @* Ganss.XSS 過濾（支援 HTML） *@
+        </div>
+    </fieldset>
+
+</body>
+

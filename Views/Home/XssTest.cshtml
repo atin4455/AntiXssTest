@@ -1,0 +1,27 @@
+﻿@using AntiXssTest.Models
+@{
+    Layout = null;
+}
+
+<div>
+    <fieldset>
+        <legend>ViewData XSS Test</legend>
+        <div>
+            @Html.Raw(ViewData["dangerousData"])  @* ⚠️ Checkmarx 會偵測到 XSS 風險 *@
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>AntiXss (Microsoft)</legend>
+        <div>
+            @Html.AntiXssRaw(ViewData["dangerousData"] as string)  @* 安裝套件AntiXssRaw ,Microsoft Security Application 過濾 *@
+        </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>Ganss.XSS (推薦)</legend>
+        <div>
+            @Html.SanitizedRaw(ViewData["dangerousData"] as string)  @* 安裝套件Ganss.XSS ,Ganss.XSS 過濾（支援 HTML） *@
+        </div>
+    </fieldset>
+</div>
